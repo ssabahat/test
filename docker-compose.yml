@@ -1,0 +1,25 @@
+version: '2'
+services:
+  article_service:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/testdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    links:
+      - postgres_db:database
+  postgres_db:
+    image: 'postgres:13.1-alpine'
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=testdb
